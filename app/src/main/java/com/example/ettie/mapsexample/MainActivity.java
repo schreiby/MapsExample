@@ -19,7 +19,7 @@ import android.location.Geocoder;
 public class MainActivity extends Activity {
 
     private GoogleMap map;
-    private static final LatLng LONDON = new LatLng(+51.5000, -0.11670);
+    //private static final LatLng LONDON = new LatLng(+51.5000, -0.11670);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,31 +28,16 @@ public class MainActivity extends Activity {
 
         map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LONDON, 15));
-        map.addMarker(new MarkerOptions().position(LONDON));
-
-       map.setOnMapClickListener(new OnMapClickListener() {
-           @Override
-           public void onMapClick(LatLng latLng) {
-              /* Toast.makeText(MainActivity.this, "Location: " + latLng, Toast.LENGTH_SHORT).show();*/
-
-               Geocoder geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
-               try {
-                   List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-
-                   String addStr = "";
-                   if (addresses.size() > 0) {
-                       for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex(); i++) {
-                           addStr += addresses.get(0).getAddressLine(i) + "\n";
-                       }
-                   }
-                   Toast.makeText(getBaseContext(), addStr, Toast.LENGTH_SHORT).show();
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
-           }
-       });
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try{
+            List<Address> addresses = geocoder.getFromLocationName("Taj Mahal", 5);
+            if (addresses.size() > 0) {
+                LatLng tajMahal = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(tajMahal, 15));
+                map.addMarker(new MarkerOptions().position(tajMahal));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-
 }
