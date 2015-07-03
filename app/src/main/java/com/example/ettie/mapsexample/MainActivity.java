@@ -24,6 +24,8 @@ public class MainActivity extends ActionBarActivity {
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(LONDON, 15));
         map.addMarker(new MarkerOptions().position(LONDON));
+
+        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
     }
 
     @Override
